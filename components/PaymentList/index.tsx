@@ -1,54 +1,58 @@
 import * as i from 'types';
-import * as React from 'react';
+import accounting from 'accounting';
+
+import { PaymentItem } from 'components';
+
+import { PaymentListHeaderItem } from './components';
 
 const calculateTotalLoss = (payments: i.Payment[]) => {
   let loss = 0;
 
   for (const payment of payments) {
-    const amount = parseInt(payment.Amount);
+    const amount = accounting.unformat(payment.Amount, ',');
     if (amount < 0 && payment.active) {
       loss += amount;
     }
   }
   
-  return loss;
+  return loss.toFixed(2);
 };
 
 const calculateNetLoss = (payments: i.Payment[]) => {
   let loss = 0;
 
   for (const payment of payments) {
-    const amount = parseInt(payment.Amount);
+    const amount = accounting.unformat(payment.Amount, ',');
     if (amount && payment.active) {
       loss += amount;
     }
   }
   
-  return loss;
+  return loss.toFixed(2);
 }
 
 export const PaymentList = ({
-  payments, handlePaymentClick,
-}: PaymentListProps) => {  
-
+  payments, onClick,
+}: PaymentListProps) => {
   return (
-    <div>
-      <p>Total loss: {calculateTotalLoss(payments)}</p>
-      <p>Net loss: {calculateNetLoss(payments)}</p>
-      {payments.map((payment, index) => {        
-        if (!payment.active) return null; 
-
-        return (
-          <div key={index} onClick={() => handlePaymentClick(index)}>
-            {payment.Description} {payment.Amount}
-          </div>
-        );
-      })}
+    <div className="p-6 rounded-lg mt-6 bg-slate-800">
+      <div className="flex items-center gap-x-4 mb-4">
+        <PaymentListHeaderItem text={`Total spent: € ${calculateTotalLoss(payments)}`} />
+        <PaymentListHeaderItem text={`Net spent: € ${calculateNetLoss(payments)}`} />
+      </div>
+      <div className="flex flex-col">
+        {payments.map((payment, index) => (
+          <PaymentItem
+            key={index}
+            { ...{ index, payment, onClick }}
+          />
+        ))}
+      </div>
     </div>
   )
 };
 
 type PaymentListProps = {
   payments: i.Payment[];
-  handlePaymentClick: (payment: number) => void;
+  onClick: (payment: number) => void;
 };

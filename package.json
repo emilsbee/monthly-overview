@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "accounting": "^0.4.1",
     "next": "12.3.1",
     "papaparse": "^5.3.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@types/accounting": "^0.4.2",
     "@types/node": "18.11.3",
     "@types/papaparse": "^5.3.5",
     "@types/react": "18.0.21",

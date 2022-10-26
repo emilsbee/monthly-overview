@@ -31,9 +31,9 @@ const Home: NextPage = () => {
   };
   
   return (
-    <div>
+    <div className="w-full flex flex-col p-6">
       <input type="file" onChange={handleFileUpload} />
-      <PaymentList payments={payments} handlePaymentClick={handlePaymentClick} />
+      <PaymentList payments={payments} onClick={handlePaymentClick} />
     </div>
   )
 }
